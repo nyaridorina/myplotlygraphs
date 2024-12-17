@@ -29,4 +29,6 @@ fig = px.line(df_melted, x="Dátum", y="Szavazati arány (%)", color="Párt",
               color_discrete_map={"FIDESZ-KDMP": "orange", "TISZA": "green"})
 
 fig.update_traces(mode="lines+markers", marker=dict(size=8))
-fig.show()
+
+# Export to HTML file
+fig.write_html("plotly_chart.html")
