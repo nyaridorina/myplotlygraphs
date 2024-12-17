@@ -1,0 +1,32 @@
+import pandas as pd
+import plotly.express as px
+
+# Data
+data = {
+    "Kutatócég": ["IDEA Intézet", "Závecz Research Intézet", "21 Kutatóközpont", "Nézőpont Intézet", 
+                  "Publicus Intézet", "Republikon Intézet", "Real-PR 93.", "Medián", "IDEA Intézet", 
+                  "Nézőpont Intézet", "Publicus Intézet", "Magyar Társadalomkutató", "Medián", 
+                  "IDEA Intézet", "Nézőpont Intézet"],
+    "Dátum": ["2024.10.07", "2024.10.08", "2024.10.15", "2024.10.17", "2024.10.18", 
+              "2024.10.29", "2024.10.29", "2024.11.04", "2024.11.08", "2024.11.13", 
+              "2024.11.19", "2024.11.22", "2024.11.26", "2024.12.06", "2024.12.16"],
+    "FIDESZ-KDMP": [28, 25, 29, 25, 25, 26, 35, 32, 28, 38, 24, 38, 27, 27, 38],
+    "TISZA": [28, 21, 24, 26, 26, 29, 27, 34, 30, 25, 25, 26, 34, 33, 25]
+}
+
+# Create DataFrame and convert date to datetime
+df = pd.DataFrame(data)
+df['Dátum'] = pd.to_datetime(df['Dátum'], format='%Y.%m.%d')
+
+# Melt DataFrame for easier plotting
+df_melted = df.melt(id_vars=["Dátum"], value_vars=["FIDESZ-KDMP", "TISZA"], 
+                    var_name="Párt", value_name="Szavazati arány (%)")
+
+# Create Plotly Line Graph
+fig = px.line(df_melted, x="Dátum", y="Szavazati arány (%)", color="Párt", 
+              title="FIDESZ-KDMP és TISZA támogatottsága időrendben",
+              labels={"Dátum": "Dátum", "Szavazati arány (%)": "Szavazati arány (%)"},
+              color_discrete_map={"FIDESZ-KDMP": "orange", "TISZA": "green"})
+
+fig.update_traces(mode="lines+markers", marker=dict(size=8))
+fig.show()
